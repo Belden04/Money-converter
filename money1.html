@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>XYZ-Company Currency Exchange</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    header {
+      background-color: #0d0a44;
+      color: white;
+      text-align: center;
+      padding: 30px 0;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      background-color: white;
+      max-width: 600px;
+      margin: -30px auto 0;
+      padding: 30px 40px;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .form-group label {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .form-group input, .form-group select {
+      flex: 2;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #0d0a44;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #0d0a44;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>XYZ-COMPANY</h1>
+  <p>CURRENCY EXCHANGE PLATFORM</p>
+</header>
+
+<div class="container">
+  <div class="form-group">
+    <label for="amount">Amount</label>
+    <input type="number" id="amount" placeholder="Enter amount">
+  </div>
+
+  <div class="form-group">
+    <label for="fromCurrency">From</label>
+    <select id="fromCurrency"></select>
+  </div>
+
+  <div class="form-group">
+    <label for="toCurrency">To</label>
+    <select id="toCurrency"></select>
+  </div>
+
+  <button onclick="convertCurrency()">Convert</button>
+
+  <div class="result" id="result">Result</div>
+</div>
+
+<script>
+  const currencies = [
+    { code: "USD", name: "USD - $" },
+    { code: "EUR", name: "EUR - €" },
+    { code: "GBP", name: "GBP - £" },
+    { code: "INR", name: "India - ₹" },
+    { code: "RWF", name: "Rwanda - RWF" }
+  ];
+
+  const exchangeRates = {
+    USD: { USD: 1, EUR: 0.85, GBP: 0.75, INR: 83, RWF: 103 },
+    EUR: { USD: 1.18, EUR: 1, GBP: 0.88, INR: 98, RWF: 120 },
+    GBP: { USD: 1.33, EUR: 1.14, GBP: 1, INR: 110, RWF: 135 },
+    INR: { USD: 0.012, EUR: 0.010, GBP: 0.009, INR: 1, RWF: 1.25 },
+    RWF: { USD: 0.0095, EUR: 0.0083, GBP: 0.0074, INR: 0.8, RWF: 1 }
+  };
+
+  function populateDropdowns() {
+    const fromSelect = document.getElementById("fromCurrency");
+    const toSelect = document.getElementById("toCurrency");
+
+    currencies.forEach(currency => {
+      const option1 = document.createElement("option");
+      option1.value = currency.code;
+      option1.textContent = currency.name;
+      fromSelect.appendChild(option1);
+
+      const option2 = document.createElement("option");
+      option2.value = currency.code;
+      option2.textContent = currency.name;
+      toSelect.appendChild(option2);
+    });
+
+    fromSelect.value = "USD";
+    toSelect.value = "RWF";
+  }
+
+  function convertCurrency() {
+    const amount = parseFloat(document.getElementById("amount").value);
+    const from = document.getElementById("fromCurrency").value;
+    const to = document.getElementById("toCurrency").value;
+    const resultDisplay = document.getElementById("result");
+
+    if (isNaN(amount) || amount <= 0) {
+      resultDisplay.textContent = "Please enter a valid amount.";
+      return;
+    }
+
+    const rate = exchangeRates[from][to];
+    const result = amount * rate;
+
+    resultDisplay.textContent = `${result.toLocaleString()} ${to}`;
+  }
+
+  // Init dropdowns
+  window.onload = populateDropdowns;
+</script>
+
+</body>
+</html>
